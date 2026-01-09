@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cipher Demo</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        input, select, textarea, button { margin: 5px; padding: 5px; width: 100%; }
+        textarea { height: 80px; }
+    </style>
+</head>
+<body>
+
+<h2>Cipher Demo: Affine & Vigenère</h2>
+
+<label>Choose Cipher:</label>
+<select id="cipherType">
+    <option value="affine">Affine</option>
+    <option value="vigenere">Vigenere</option>
+</select>
+
+<label>Action:</label>
+<select id="actionType">
+    <option value="encrypt">Encrypt</option>
+    <option value="decrypt">Decrypt</option>
+</select>
+
+<label>Message:</label>
+<textarea id="message"></textarea>
+
+<div id="affineKeys">
+    <label>Affine Key a (coprime with 26):</label>
+    <input type="number" id="a" value="5">
+    <label>Affine Key b:</label>
+    <input type="number" id="b" value="8">
+</div>
+
+<div id="vigenereKey" style="display:none;">
+    <label>Vigenère Key:</label>
+    <input type="text" id="vkey" value="KEY">
+</div>
+
+<button onclick="runCipher()">Run</button>
+
+<h3>Result:</h3>
+<textarea id="result" readonly></textarea>
+
+<script>
+// ---------- SAFE MOD ----------
+function mod(n, m) {
+    return ((n % m) + m) % m;
+}
+
+// ---------- MOD INVERSE ----------
+function modInverse(a, m) {
+    for (let i = 1; i < m; i++) {
+        if (mod(a * i, m) === 1) return i;
+    }
+    throw new Error("Invalid key: no modular inverse");
+}
+
+// ---------- AFFINE ENCRYPT ----------
+function affineEncrypt(text, a, b) {
+    let res = "";
+    for (let c of text) {
+
+        if (c >= 'A' && c <= 'Z') {
+            let x = c.charCodeAt(0) - 65;
+            res += String.fromCharCode(mod(a * x + b, 26) + 65);
+        }
+        else if (c >= 'a' && c <= 'z') {
+            let x = c.charCodeAt(0) - 97;
+            res += String.fromCharCode(mod(a * x + b, 26) + 97);
+        }
+        else {
+            res += c;
+        }
+    }
+    return res;
+}
+
+// ---------- AFFINE DECRYPT ----------
+function affineDecrypt(text, a, b) {
+    let aInv = modInverse(a, 26);
+    let res = "";
+
+    for (let c of text) {
+
+        if (c >= 'A' && c <= 'Z') {
+            let y = c.charCodeAt(0) - 65;
+            res += String.fromCharCode(mod(aInv * (y - b), 26) + 65);
+        }
+        else if (c >= 'a' && c <= 'z') {
+            let y = c.charCodeAt(0) - 97;
+            res += String.fromCharCode(mod(aInv * (y - b), 26) + 97);
+        }
+        else {
+            res += c;
+        }
+    }
+    return res;
+}
+
+// ---------- VIGENERE ENCRYPT ----------
+function vigenereEncrypt(text, key) {
+    let res = "";
+    let k = 0;
+
+    for (let c of text) {
+
+        if (c >= 'A' && c <= 'Z') {
+            let pi = c.charCodeAt(0) - 65;
+            let ki = key[k % key.length].toUpperCase().charCodeAt(0) - 65;
+            res += String.fromCharCode(mod(pi + ki, 26) + 65);
+            k++;
+        }
+        else if (c >= 'a' && c <= 'z') {
+            let pi = c.charCodeAt(0) - 97;
+            let ki = key[k % key.length].toLowerCase().charCodeAt(0) - 97;
+            res += String.fromCharCode(mod(pi + ki, 26) + 97);
+            k++;
+        }
+        else {
+            res += c;
+        }
+    }
+    return res;
+}
+
+// ---------- VIGENERE DECRYPT ----------
+function vigenereDecrypt(text, key) {
+    let res = "";
+    let k = 0;
+
+    for (let c of text) {
+
+        if (c >= 'A' && c <= 'Z') {
+            let ci = c.charCodeAt(0) - 65;
+            let ki = key[k % key.length].toUpperCase().charCodeAt(0) - 65;
+            res += String.fromCharCode(mod(ci - ki, 26) + 65);
+            k++;
+        }
+        else if (c >= 'a' && c <= 'z') {
+            let ci = c.charCodeAt(0) - 97;
+            let ki = key[k % key.length].toLowerCase().charCodeAt(0) - 97;
+            res += String.fromCharCode(mod(ci - ki, 26) + 97);
+            k++;
+        }
+        else {
+            res += c;
+        }
+    }
+    return res;
+}
+
+// ---------- UI HANDLING ----------
+document.getElementById("cipherType").addEventListener("change", function () {
+    document.getElementById("affineKeys").style.display =
+        this.value === "affine" ? "block" : "none";
+    document.getElementById("vigenereKey").style.display =
+        this.value === "vigenere" ? "block" : "none";
+});
+
+function runCipher() {
+    let cipher = document.getElementById("cipherType").value;
+    let action = document.getElementById("actionType").value;
+    let msg = document.getElementById("message").value;
+    let result = "";
+
+    try {
+        if (cipher === "affine") {
+            let a = parseInt(document.getElementById("a").value);
+            let b = parseInt(document.getElementById("b").value);
+            result = action === "encrypt"
+                ? affineEncrypt(msg, a, b)
+                : affineDecrypt(msg, a, b);
+        } else {
+            let key = document.getElementById("vkey").value;
+            result = action === "encrypt"
+                ? vigenereEncrypt(msg, key)
+                : vigenereDecrypt(msg, key);
+        }
+        document.getElementById("result").value = result;
+    } catch (e) {
+        document.getElementById("result").value = "Error: " + e.message;
+    }
+}
+</script>
+
+</body>
+</html>
