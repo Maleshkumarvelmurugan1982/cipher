@@ -4,8 +4,17 @@
     <title>Cipher Demo</title>
     <style>
         body { font-family: Arial; padding: 20px; }
-        input, select, textarea, button { margin: 5px; padding: 5px; width: 100%; }
+        input, select, textarea, button { margin: 5px 0; padding: 5px; width: 100%; }
         textarea { height: 80px; }
+
+        /* iframe styling */
+        #playfairFrame {
+            display: none;
+            margin-top: 20px;
+            width: 100%;
+            height: 500px;
+            border: 2px solid #444;
+        }
     </style>
 </head>
 <body>
@@ -44,6 +53,18 @@
 <h3>Result:</h3>
 <textarea id="result" readonly></textarea>
 
+<hr>
+
+<!-- Playfair button -->
+<button onclick="openPlayfair()">Open Playfair Cipher</button>
+
+<!-- iframe -->
+<iframe
+    id="playfairFrame"
+    src=""
+    title="Playfair Cipher">
+</iframe>
+
 <script>
 // ---------- SAFE MOD ----------
 function mod(n, m) {
@@ -62,16 +83,13 @@ function modInverse(a, m) {
 function affineEncrypt(text, a, b) {
     let res = "";
     for (let c of text) {
-
         if (c >= 'A' && c <= 'Z') {
             let x = c.charCodeAt(0) - 65;
             res += String.fromCharCode(mod(a * x + b, 26) + 65);
-        }
-        else if (c >= 'a' && c <= 'z') {
+        } else if (c >= 'a' && c <= 'z') {
             let x = c.charCodeAt(0) - 97;
             res += String.fromCharCode(mod(a * x + b, 26) + 97);
-        }
-        else {
+        } else {
             res += c;
         }
     }
@@ -82,18 +100,14 @@ function affineEncrypt(text, a, b) {
 function affineDecrypt(text, a, b) {
     let aInv = modInverse(a, 26);
     let res = "";
-
     for (let c of text) {
-
         if (c >= 'A' && c <= 'Z') {
             let y = c.charCodeAt(0) - 65;
             res += String.fromCharCode(mod(aInv * (y - b), 26) + 65);
-        }
-        else if (c >= 'a' && c <= 'z') {
+        } else if (c >= 'a' && c <= 'z') {
             let y = c.charCodeAt(0) - 97;
             res += String.fromCharCode(mod(aInv * (y - b), 26) + 97);
-        }
-        else {
+        } else {
             res += c;
         }
     }
@@ -104,22 +118,18 @@ function affineDecrypt(text, a, b) {
 function vigenereEncrypt(text, key) {
     let res = "";
     let k = 0;
-
     for (let c of text) {
-
         if (c >= 'A' && c <= 'Z') {
             let pi = c.charCodeAt(0) - 65;
             let ki = key[k % key.length].toUpperCase().charCodeAt(0) - 65;
             res += String.fromCharCode(mod(pi + ki, 26) + 65);
             k++;
-        }
-        else if (c >= 'a' && c <= 'z') {
+        } else if (c >= 'a' && c <= 'z') {
             let pi = c.charCodeAt(0) - 97;
             let ki = key[k % key.length].toLowerCase().charCodeAt(0) - 97;
             res += String.fromCharCode(mod(pi + ki, 26) + 97);
             k++;
-        }
-        else {
+        } else {
             res += c;
         }
     }
@@ -130,22 +140,18 @@ function vigenereEncrypt(text, key) {
 function vigenereDecrypt(text, key) {
     let res = "";
     let k = 0;
-
     for (let c of text) {
-
         if (c >= 'A' && c <= 'Z') {
             let ci = c.charCodeAt(0) - 65;
             let ki = key[k % key.length].toUpperCase().charCodeAt(0) - 65;
             res += String.fromCharCode(mod(ci - ki, 26) + 65);
             k++;
-        }
-        else if (c >= 'a' && c <= 'z') {
+        } else if (c >= 'a' && c <= 'z') {
             let ci = c.charCodeAt(0) - 97;
             let ki = key[k % key.length].toLowerCase().charCodeAt(0) - 97;
             res += String.fromCharCode(mod(ci - ki, 26) + 97);
             k++;
-        }
-        else {
+        } else {
             res += c;
         }
     }
@@ -183,6 +189,13 @@ function runCipher() {
     } catch (e) {
         document.getElementById("result").value = "Error: " + e.message;
     }
+}
+
+// ---------- PLAYFAIR IFRAME ----------
+function openPlayfair() {
+    const frame = document.getElementById("playfairFrame");
+    frame.src = "https://playfair-erq7.onrender.com/";
+    frame.style.display = "block";
 }
 </script>
 
