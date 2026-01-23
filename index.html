@@ -8,7 +8,7 @@
         textarea { height: 80px; }
 
         /* iframe styling */
-        #playfairFrame {
+        #playfairFrame, #millerFrame {
             display: none;
             margin-top: 20px;
             width: 100%;
@@ -58,11 +58,21 @@
 <!-- Playfair button -->
 <button onclick="openPlayfair()">Open Playfair Cipher</button>
 
-<!-- iframe -->
 <iframe
     id="playfairFrame"
     src=""
     title="Playfair Cipher">
+</iframe>
+
+<hr>
+
+<!-- Miller-Rabin button -->
+<button onclick="openMiller()">Open Miller–Rabin Test</button>
+
+<iframe
+    id="millerFrame"
+    src=""
+    title="Miller Rabin Test">
 </iframe>
 
 <script>
@@ -195,6 +205,13 @@ function runCipher() {
 function openPlayfair() {
     const frame = document.getElementById("playfairFrame");
     frame.src = "https://playfair-erq7.onrender.com/";
+    frame.style.display = "block";
+}
+
+// ---------- MILLER-RABIN IFRAME ----------
+function openMiller() {
+    const frame = document.getElementById("millerFrame");
+    frame.src = "https://miler-rabin.onrender.com/";
     frame.style.display = "block";
 }
 </script>
