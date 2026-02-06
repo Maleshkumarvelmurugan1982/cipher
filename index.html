@@ -8,7 +8,10 @@
         textarea { height: 80px; }
 
         /* iframe styling */
-        #playfairFrame, #millerFrame {
+        #playfairFrame,
+        #millerFrame,
+        #gcdFrame,
+        #fermatFrame {
             display: none;
             margin-top: 20px;
             width: 100%;
@@ -55,25 +58,23 @@
 
 <hr>
 
-<!-- Playfair button -->
 <button onclick="openPlayfair()">Open Playfair Cipher</button>
-
-<iframe
-    id="playfairFrame"
-    src=""
-    title="Playfair Cipher">
-</iframe>
+<iframe id="playfairFrame" src="" title="Playfair Cipher"></iframe>
 
 <hr>
 
-<!-- Miller-Rabin button -->
 <button onclick="openMiller()">Open Miller–Rabin Test</button>
+<iframe id="millerFrame" src="" title="Miller Rabin Test"></iframe>
 
-<iframe
-    id="millerFrame"
-    src=""
-    title="Miller Rabin Test">
-</iframe>
+<hr>
+
+<button onclick="openGCD()">Open GCD Calculator</button>
+<iframe id="gcdFrame" src="" title="GCD Calculator"></iframe>
+
+<hr>
+
+<button onclick="openFermat()">Open Fermat Test</button>
+<iframe id="fermatFrame" src="" title="Fermat Test"></iframe>
 
 <script>
 // ---------- SAFE MOD ----------
@@ -201,17 +202,28 @@ function runCipher() {
     }
 }
 
-// ---------- PLAYFAIR IFRAME ----------
+// ---------- IFRAME FUNCTIONS ----------
 function openPlayfair() {
     const frame = document.getElementById("playfairFrame");
     frame.src = "https://playfair-erq7.onrender.com/";
     frame.style.display = "block";
 }
 
-// ---------- MILLER-RABIN IFRAME ----------
 function openMiller() {
     const frame = document.getElementById("millerFrame");
     frame.src = "https://miler-rabin.onrender.com/";
+    frame.style.display = "block";
+}
+
+function openGCD() {
+    const frame = document.getElementById("gcdFrame");
+    frame.src = "https://gcd-yalo.onrender.com/";
+    frame.style.display = "block";
+}
+
+function openFermat() {
+    const frame = document.getElementById("fermatFrame");
+    frame.src = "https://fermat.onrender.com/";
     frame.style.display = "block";
 }
 </script>
