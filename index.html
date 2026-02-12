@@ -7,12 +7,7 @@
         input, select, textarea, button { margin: 5px 0; padding: 5px; width: 100%; }
         textarea { height: 80px; }
 
-        /* iframe styling */
-        #playfairFrame,
-        #millerFrame,
-        #gcdFrame,
-        #fermatFrame,
-        #simpleDesFrame {
+        iframe {
             display: none;
             margin-top: 20px;
             width: 100%;
@@ -59,28 +54,33 @@
 
 <hr>
 
-<button onclick="openPlayfair()">Open Playfair Cipher</button>
-<iframe id="playfairFrame" src="" title="Playfair Cipher"></iframe>
+<button onclick="openTool('playfairFrame','https://playfair-erq7.onrender.com/')">Open Playfair Cipher</button>
+<iframe id="playfairFrame"></iframe>
 
 <hr>
 
-<button onclick="openMiller()">Open Miller–Rabin Test</button>
-<iframe id="millerFrame" src="" title="Miller Rabin Test"></iframe>
+<button onclick="openTool('millerFrame','https://miler-rabin.onrender.com/')">Open Miller–Rabin Test</button>
+<iframe id="millerFrame"></iframe>
 
 <hr>
 
-<button onclick="openGCD()">Open GCD Calculator</button>
-<iframe id="gcdFrame" src="" title="GCD Calculator"></iframe>
+<button onclick="openTool('gcdFrame','https://gcd-yalo.onrender.com/')">Open GCD Calculator</button>
+<iframe id="gcdFrame"></iframe>
 
 <hr>
 
-<button onclick="openFermat()">Open Fermat Test</button>
-<iframe id="fermatFrame" src="" title="Fermat Test"></iframe>
+<button onclick="openTool('fermatFrame','https://fermat.onrender.com/')">Open Fermat Test</button>
+<iframe id="fermatFrame"></iframe>
 
 <hr>
 
-<button onclick="openSimpleDES()">Open Simple DES</button>
-<iframe id="simpleDesFrame" src="" title="Simple DES"></iframe>
+<button onclick="openTool('simpleDesFrame','https://simple-des.onrender.com/')">Open Simple DES</button>
+<iframe id="simpleDesFrame"></iframe>
+
+<hr>
+
+<button onclick="openTool('aesFrame','https://aes-zts8.onrender.com/')">Open AES</button>
+<iframe id="aesFrame"></iframe>
 
 <script>
 // ---------- SAFE MOD ----------
@@ -208,35 +208,17 @@ function runCipher() {
     }
 }
 
-// ---------- IFRAME FUNCTIONS ----------
-function openPlayfair() {
-    const frame = document.getElementById("playfairFrame");
-    frame.src = "https://playfair-erq7.onrender.com/";
-    frame.style.display = "block";
-}
+// ---------- SMART TOOL LOADER ----------
+function openTool(frameId, url) {
+    const frames = document.querySelectorAll("iframe");
+    frames.forEach(frame => {
+        frame.style.display = "none";
+        frame.src = "";
+    });
 
-function openMiller() {
-    const frame = document.getElementById("millerFrame");
-    frame.src = "https://miler-rabin.onrender.com/";
-    frame.style.display = "block";
-}
-
-function openGCD() {
-    const frame = document.getElementById("gcdFrame");
-    frame.src = "https://gcd-yalo.onrender.com/";
-    frame.style.display = "block";
-}
-
-function openFermat() {
-    const frame = document.getElementById("fermatFrame");
-    frame.src = "https://fermat.onrender.com/";
-    frame.style.display = "block";
-}
-
-function openSimpleDES() {
-    const frame = document.getElementById("simpleDesFrame");
-    frame.src = "https://simple-des.onrender.com/";
-    frame.style.display = "block";
+    const selectedFrame = document.getElementById(frameId);
+    selectedFrame.src = url;
+    selectedFrame.style.display = "block";
 }
 </script>
 
