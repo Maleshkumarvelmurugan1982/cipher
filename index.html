@@ -11,7 +11,8 @@
         #playfairFrame,
         #millerFrame,
         #gcdFrame,
-        #fermatFrame {
+        #fermatFrame,
+        #simpleDesFrame {
             display: none;
             margin-top: 20px;
             width: 100%;
@@ -75,6 +76,11 @@
 
 <button onclick="openFermat()">Open Fermat Test</button>
 <iframe id="fermatFrame" src="" title="Fermat Test"></iframe>
+
+<hr>
+
+<button onclick="openSimpleDES()">Open Simple DES</button>
+<iframe id="simpleDesFrame" src="" title="Simple DES"></iframe>
 
 <script>
 // ---------- SAFE MOD ----------
@@ -224,6 +230,12 @@ function openGCD() {
 function openFermat() {
     const frame = document.getElementById("fermatFrame");
     frame.src = "https://fermat.onrender.com/";
+    frame.style.display = "block";
+}
+
+function openSimpleDES() {
+    const frame = document.getElementById("simpleDesFrame");
+    frame.src = "https://simple-des.onrender.com/";
     frame.style.display = "block";
 }
 </script>
