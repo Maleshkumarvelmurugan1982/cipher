@@ -84,15 +84,19 @@
 
 <hr>
 
-<!-- RSA -->
 <button onclick="openTool('rsaFrame','https://rsa-922w.onrender.com/')">Open RSA Tool</button>
 <iframe id="rsaFrame"></iframe>
 
 <hr>
 
-<!-- ✅ NEW DIFFIE-HELLMAN -->
 <button onclick="openTool('diffeFrame','https://diffe.onrender.com/')">Open Diffie-Hellman</button>
 <iframe id="diffeFrame"></iframe>
+
+<hr>
+
+<!-- ✅ NEW SHA-256 TOOL -->
+<button onclick="openTool('shaFrame','https://sha-256.onrender.com/')">Open SHA-256 Generator</button>
+<iframe id="shaFrame"></iframe>
 
 <script>
 // ---------- SAFE MOD ----------
@@ -143,51 +147,38 @@ function affineDecrypt(text, a, b) {
     return res;
 }
 
-// ---------- VIGENERE ENCRYPT ----------
+// ---------- VIGENERE ----------
 function vigenereEncrypt(text, key) {
     let res = "";
     let k = 0;
     for (let c of text) {
-        if (c >= 'A' && c <= 'Z') {
-            let pi = c.charCodeAt(0) - 65;
-            let ki = key[k % key.length].toUpperCase().charCodeAt(0) - 65;
-            res += String.fromCharCode(mod(pi + ki, 26) + 65);
-            k++;
-        } else if (c >= 'a' && c <= 'z') {
-            let pi = c.charCodeAt(0) - 97;
+        if (/[a-zA-Z]/.test(c)) {
+            let base = c === c.toUpperCase() ? 65 : 97;
+            let pi = c.charCodeAt(0) - base;
             let ki = key[k % key.length].toLowerCase().charCodeAt(0) - 97;
-            res += String.fromCharCode(mod(pi + ki, 26) + 97);
+            res += String.fromCharCode(mod(pi + ki, 26) + base);
             k++;
-        } else {
-            res += c;
-        }
+        } else res += c;
     }
     return res;
 }
 
-// ---------- VIGENERE DECRYPT ----------
 function vigenereDecrypt(text, key) {
     let res = "";
     let k = 0;
     for (let c of text) {
-        if (c >= 'A' && c <= 'Z') {
-            let ci = c.charCodeAt(0) - 65;
-            let ki = key[k % key.length].toUpperCase().charCodeAt(0) - 65;
-            res += String.fromCharCode(mod(ci - ki, 26) + 65);
-            k++;
-        } else if (c >= 'a' && c <= 'z') {
-            let ci = c.charCodeAt(0) - 97;
+        if (/[a-zA-Z]/.test(c)) {
+            let base = c === c.toUpperCase() ? 65 : 97;
+            let ci = c.charCodeAt(0) - base;
             let ki = key[k % key.length].toLowerCase().charCodeAt(0) - 97;
-            res += String.fromCharCode(mod(ci - ki, 26) + 97);
+            res += String.fromCharCode(mod(ci - ki, 26) + base);
             k++;
-        } else {
-            res += c;
-        }
+        } else res += c;
     }
     return res;
 }
 
-// ---------- UI HANDLING ----------
+// ---------- UI ----------
 document.getElementById("cipherType").addEventListener("change", function () {
     document.getElementById("affineKeys").style.display =
         this.value === "affine" ? "block" : "none";
@@ -220,7 +211,7 @@ function runCipher() {
     }
 }
 
-// ---------- SMART TOOL LOADER ----------
+// ---------- TOOL LOADER ----------
 function openTool(frameId, url) {
     const frames = document.querySelectorAll("iframe");
     frames.forEach(frame => {
