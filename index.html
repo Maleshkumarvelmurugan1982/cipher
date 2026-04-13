@@ -94,9 +94,14 @@
 
 <hr>
 
-<!-- ✅ NEW SHA-256 TOOL -->
 <button onclick="openTool('shaFrame','https://sha-256.onrender.com/')">Open SHA-256 Generator</button>
 <iframe id="shaFrame"></iframe>
+
+<hr>
+
+<!-- ✅ NEW MAC TOOL -->
+<button onclick="openTool('macFrame','https://mac-8tci.onrender.com/')">Open MAC Generator</button>
+<iframe id="macFrame"></iframe>
 
 <script>
 // ---------- SAFE MOD ----------
@@ -112,7 +117,7 @@ function modInverse(a, m) {
     throw new Error("Invalid key: no modular inverse");
 }
 
-// ---------- AFFINE ENCRYPT ----------
+// ---------- AFFINE ----------
 function affineEncrypt(text, a, b) {
     let res = "";
     for (let c of text) {
@@ -122,14 +127,11 @@ function affineEncrypt(text, a, b) {
         } else if (c >= 'a' && c <= 'z') {
             let x = c.charCodeAt(0) - 97;
             res += String.fromCharCode(mod(a * x + b, 26) + 97);
-        } else {
-            res += c;
-        }
+        } else res += c;
     }
     return res;
 }
 
-// ---------- AFFINE DECRYPT ----------
 function affineDecrypt(text, a, b) {
     let aInv = modInverse(a, 26);
     let res = "";
@@ -140,9 +142,7 @@ function affineDecrypt(text, a, b) {
         } else if (c >= 'a' && c <= 'z') {
             let y = c.charCodeAt(0) - 97;
             res += String.fromCharCode(mod(aInv * (y - b), 26) + 97);
-        } else {
-            res += c;
-        }
+        } else res += c;
     }
     return res;
 }
